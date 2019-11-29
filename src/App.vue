@@ -1,75 +1,112 @@
 <template>
   <v-app>
-      <v-app-bar
-      min-height="100"
-      max-height="400"
-        absolute
-        color="#004d40"
-        dark
-        shrink-on-scroll
-        prominent
-        src="https://s3-eu-west-1.amazonaws.com/xanivouga/54.jpg"
-        fade-img-on-scroll
-        scroll-target="#scrolling-techniques-3"
-      >
-        <template v-slot:img="{ props }">
-          <v-img
-            v-bind="props"
-            gradient="to top right, rgba(23,140,17,.7), rgba(25,32,27,.7)"
-          ></v-img>
-        </template>
+<!-- opcao 'app' coloca a lista tentro da applicacao -->    <v-navigation-drawer v-model="drawer" app >
 
-        <v-btn icon v-if="$route.name !== 'home'" @click="$router.go(-1)">
-            <v-icon>arrow_back</v-icon>
-        </v-btn>
+    <v-list>
+          <v-list-item>
+            <v-list-item-avatar>
+                    <!-- <v-btn fab dark color="white"
+                        @click="dialog = !dialog"
+                        v-if="userIsAuthenticated">
+                        <v-avatar size="52" >
+                            <v-img :src="profilePicUrl">
+                            </v-img>
+                        </v-avatar>
+                    </v-btn> -->
+              <v-img src="profile.png"></v-img>
+            </v-list-item-avatar>
+          </v-list-item>
 
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title class="title">Anonimo</v-list-item-title>
+                <v-list-item-subtitle>
+                  anonimo@portocaro.pt
+                </v-list-item-subtitle>
+            </v-list-item-content>
 
-        <v-toolbar-title>casadocanto.pt</v-toolbar-title>
+            <!-- <v-list-item-action>
+              <v-icon>mdi-menu-down</v-icon>
+            </v-list-item-action> -->
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
 
-        <v-spacer></v-spacer>
-
-        <v-menu
-          bottom
-          left
-        >
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="red"
-              v-on="on"
-            >
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
+        <v-list nav dense>
+          <v-list-item-group v-model="item" color="primary">
             <v-list-item
               v-for="(item, i) in items"
               :key="i"
             >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" @click="$router.push({ name: item.link})" > </v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
-          </v-list>
-        </v-menu>
+          </v-list-item-group>
+        </v-list>
 
-         <v-btn icon large v-if="$route.name=='post'" @click="$router.push({name:'camera'})">
+    </v-navigation-drawer>
+
+    <v-app-bar app color="primary" dark >
+
+      <v-app-bar-nav-icon  @click.stop="drawer = !drawer"/>
+
+      <!-- So mostra PORTOCARODOS quando nao e utilizador -->
+            <router-link to="/" tag="span" style="cursor: pointer" class="font-weight-regular title hidden-md-and-down" >
+                    <div v-if="userIsAuthenticated"> </div>
+                    <div v-else>PORTOCARODOS &copy;</div>
+            </router-link>
+      <v-spacer></v-spacer>
+      <v-btn icon large v-if="$route.name=='post'" @click="$router.push({name:'camera'})">
         <v-icon>camera_alt</v-icon>
-        </v-btn>
-
-      </v-app-bar>
-       <v-sheet
-        id="scrolling-techniques-3"
-        class="overflow-y-auto"
-        max-height="200"
-      >
-        <v-container style="height: 1000px;"></v-container>
-      </v-sheet>
+     </v-btn>
+      <v-btn icon v-if="$route.name !== 'home'" @click="$router.go(-1)">
+            <v-icon large color="red">arrow_back</v-icon>
+      </v-btn>
+    </v-app-bar>
 
     <v-content>
-      <router-view></router-view>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <router-view></router-view>
+      </v-container>
     </v-content>
 
+    <v-footer color="primary" app >
+        <span class="white--text">&copy;xani</span>
+        <v-spacer></v-spacer>
+        <v-bottom-sheet v-model="sheet">
+            <template v-slot:activator="{ on }">
+            <v-btn color="red" v-on="on">
+                Redes Sociais
+            </v-btn>
+            </template>
+            <v-sheet class="text-center" height="100px">
+                <!-- <div>
+                Politica de Redes Sociais para a Equipa PortocaroDos
+                </div> -->
+                <v-btn v-for="(icon,i) in icons"
+                 :key="i"
+                 :href="icon.link"
+                 icon
+                 class="hidden-xs-and-down">
+                    <v-icon size="28px">{{ icon.icon }}</v-icon>
+                </v-btn>
+
+             <v-spacer></v-spacer>
+             <v-btn class="mt-6" small flat color="red" @click="sheet = !sheet">
+                    close
+                </v-btn>
+            </v-sheet>
+        </v-bottom-sheet>
+
+    </v-footer>
 
   </v-app>
 </template>
@@ -77,15 +114,14 @@
 <script>
 export default {
   name: "App",
-  components: {
-    //Home
-  },
   data: () => ({
+    drawer: false,
+    sheet: false,
+    item: 0,
     items: [
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me 2" }
+      { icon: "mdi-image", title: "Fotos", link: "home" },
+      { icon: "mdi-folder", title: "Treino", link: "fotos" },
+      { icon: "mdi-help", title: "Ajuda", link: "ajuda" }
     ],
     icons: [
       {
@@ -106,7 +142,24 @@ export default {
       }
     ]
   }),
+  computed: {
+    userIsAuthenticated() {
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
+    }
+    /* profilePicUrl() {
+      return this.$store.getters.profilePicUrl;
+    } */
+  },
   mounted() {},
   methods: {}
 };
 </script>
+
+<style>
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url("https://code.getmdl.io/1.2.1/material.blue-red.min.css");
+</style>
+

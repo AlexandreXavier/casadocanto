@@ -2,7 +2,7 @@ import colors from 'vuetify/lib/util/colors'
 
 export default {
     primary: {
-        base: colors.green.darken4,
+        base: colors.teal.darken4,
         darken1: colors.purple.darken2,
     },
     secondary: colors.indigo,
@@ -10,4 +10,8 @@ export default {
     // Here we add a custom `tertiary` color
     tertiary: colors.pink.base,
     throttleman: colors.green.darken4,
+    portocaro: {
+        base: colors.blue.greylighten1,
+        darken1: colors.purple.darken2,
+    }
 }
