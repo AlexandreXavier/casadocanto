@@ -35,36 +35,6 @@ export default {
           url: "https://s3-eu-west-1.amazonaws.com/xanivouga/52.jpg",
           comment: "Regata Principe",
           info: ""
-        },
-        {
-          id: 1,
-          url: "https://s3-eu-west-1.amazonaws.com/xanivouga/61.jpg",
-          comment: "Regata Principe",
-          info: ""
-        },
-        {
-          id: 2,
-          url: "https://s3-eu-west-1.amazonaws.com/xanivouga/63.jpg",
-          comment: "Terrier Australian dog",
-          info: ""
-        },
-        {
-          id: 3,
-          url: "https://s3-eu-west-1.amazonaws.com/xanivouga/62.jpg",
-          comment: "Regata Principe",
-          info: "Posted by Naye on Monday"
-        },
-        {
-          id: 4,
-          url: "https://s3-eu-west-1.amazonaws.com/xanivouga/64.jpg",
-          comment: "Regata Principe",
-          info: ""
-        },
-        {
-          id: 5,
-          url: "https://s3-eu-west-1.amazonaws.com/xanivouga/65.jpg",
-          comment: "Regata Principe",
-          info: ""
         }
       ]
     };

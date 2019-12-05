@@ -8,24 +8,24 @@ export default new Router({
         {
             path: '/',
             name: 'home',
-            component: () => import(/* webpackChunkName: "home" */ './components/Home.vue')
+            component: () => import('./views/Home.vue')
         },
         {
             path: '/fotos',
             name: 'fotos',
-            component: () => import('./components/Fotos.vue')
+            component: () => import('./views/Fotos.vue')
         },
         {
             path: '/fotodetails/:id',
             name: 'fotodetails',
             props: true,
-            component: () => import(/* webpackChunkName: "details" */ './components/FotoDetails.vue')
+            component: () => import('./views/FotoDetails.vue')
         },
         {
             path: '/details/:id',
             name: 'details',
             props: true,
-            component: () => import(/* webpackChunkName: "details" */ './components/Details.vue')
+            component: () => import('./components/Details.vue')
         },
         {
             path: '/post',
@@ -36,12 +36,22 @@ export default new Router({
         {
             path: '/camera',
             name: 'camera',
-            component: () => import(/* webpackChunkName: "camera" */ './components/Camera.vue')
+            component: () => import('./components/Camera.vue')
         },
         {
             path: '/ajuda',
             name: 'ajuda',
-            component: () => import(/* webpackChunkName: "ajuda" */ './components/Ajuda.vue')
-        }
+            component: () => import('./views/Ajuda.vue')
+        },
+        {
+            path: "/signup",
+            name: "signup",
+            component: () => import('./views/Signup.vue')
+        },
+        {
+            path: "/signin",
+            name: "signin",
+            component: () => import('./views/Signin.vue')
+        },
     ]
 })

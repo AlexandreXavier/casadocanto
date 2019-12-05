@@ -1,37 +1,47 @@
 <template>
   <v-app>
-<!-- opcao 'app' coloca a lista tentro da applicacao -->    <v-navigation-drawer v-model="drawer" app >
+<!-- opcao 'app' coloca a lista dentro da applicacao e fixa o navigation-->    <v-navigation-drawer v-model="drawer" app >
 
     <v-list>
           <v-list-item>
             <v-list-item-avatar>
-                    <!-- <v-btn fab dark color="white"
+                    <v-btn fab dark color="white"
                         @click="dialog = !dialog"
                         v-if="userIsAuthenticated">
                         <v-avatar size="52" >
-                            <v-img :src="profilePicUrl">
+                            <v-img :src="user.photoURL">
                             </v-img>
                         </v-avatar>
-                    </v-btn> -->
-              <v-img src="profile.png"></v-img>
+                    </v-btn>
+                    <v-btn fab dark color="white"
+                        @click="dialog = !dialog"
+                        v-else>
+                        <v-avatar size="52" >
+                            <v-img src="./profile.png">
+                            </v-img>
+                        </v-avatar>
+                    </v-btn>
+
             </v-list-item-avatar>
           </v-list-item>
 
           <v-list-item link>
             <v-list-item-content>
-              <v-list-item-title class="title">Anonimo</v-list-item-title>
-                <v-list-item-subtitle>
-                  anonimo@portocaro.pt
-                </v-list-item-subtitle>
+              <v-list-item-title class="title" v-if="userIsAuthenticated">
+                  {{user.name}}
+              </v-list-item-title>
+              <v-list-item-subtitle v-if="userIsAuthenticated">
+                  {{user.email}}
+              </v-list-item-subtitle>
             </v-list-item-content>
 
-            <!-- <v-list-item-action>
+             <v-list-item-action>
               <v-icon>mdi-menu-down</v-icon>
-            </v-list-item-action> -->
+            </v-list-item-action>
           </v-list-item>
         </v-list>
         <v-divider></v-divider>
-
+<!-- menu -->
         <v-list nav dense>
           <v-list-item-group v-model="item" color="primary">
             <v-list-item
@@ -49,21 +59,43 @@
           </v-list-item-group>
         </v-list>
 
+<!-- sair -->
+       <v-list-item
+          v-if="userIsAuthenticated"
+          @click="onLogout">
+          <v-list-item-icon>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>Sair</v-list-item-content>
+        </v-list-item>
+
     </v-navigation-drawer>
 
+<!-- barra -->
     <v-app-bar app color="primary" dark >
 
       <v-app-bar-nav-icon  @click.stop="drawer = !drawer"/>
-
       <!-- So mostra PORTOCARODOS quando nao e utilizador -->
-            <router-link to="/" tag="span" style="cursor: pointer" class="font-weight-regular title hidden-md-and-down" >
-                    <div v-if="userIsAuthenticated"> </div>
-                    <div v-else>PORTOCARODOS &copy;</div>
-            </router-link>
+        <v-toolbar-title class="display-1 hidden-xs-and-down">
+            <span class="font-weight-light text-capitalize">Portocaro</span>
+            <span class="text-uppercase red--text">Dos</span>
+        </v-toolbar-title>
       <v-spacer></v-spacer>
+
+
+      <!-- camera -->
       <v-btn icon large v-if="$route.name=='post'" @click="$router.push({name:'camera'})">
         <v-icon>camera_alt</v-icon>
      </v-btn>
+
+     <!-- sair -->
+     <v-btn v-if="userIsAuthenticated"
+            text
+            @click="onLogout">
+            <v-icon left dark>exit_to_app</v-icon>
+            Sair
+     </v-btn>
+     <!-- back -->
       <v-btn icon v-if="$route.name !== 'home'" @click="$router.go(-1)">
             <v-icon large color="red">arrow_back</v-icon>
       </v-btn>
@@ -88,20 +120,12 @@
             </v-btn>
             </template>
             <v-sheet class="text-center" height="100px">
-                <!-- <div>
-                Politica de Redes Sociais para a Equipa PortocaroDos
-                </div> -->
                 <v-btn v-for="(icon,i) in icons"
                  :key="i"
                  :href="icon.link"
                  icon
                  class="hidden-xs-and-down">
                     <v-icon size="28px">{{ icon.icon }}</v-icon>
-                </v-btn>
-
-             <v-spacer></v-spacer>
-             <v-btn class="mt-6" small flat color="red" @click="sheet = !sheet">
-                    close
                 </v-btn>
             </v-sheet>
         </v-bottom-sheet>
@@ -115,12 +139,17 @@
 export default {
   name: "App",
   data: () => ({
+    dialog: false,
     drawer: false,
     sheet: false,
+    tab: null,
+    itemsTab: ["Login", "SigIn"],
     item: 0,
     items: [
+      { icon: "lock_open", title: "Entrar", link: "signin" },
       { icon: "mdi-image", title: "Fotos", link: "home" },
       { icon: "mdi-folder", title: "Treino", link: "fotos" },
+      { icon: "face", title: "Registar", link: "signup" },
       { icon: "mdi-help", title: "Ajuda", link: "ajuda" }
     ],
     icons: [
@@ -148,13 +177,21 @@ export default {
         this.$store.getters.user !== null &&
         this.$store.getters.user !== undefined
       );
-    }
+    },
     /* profilePicUrl() {
       return this.$store.getters.profilePicUrl;
-    } */
+    }, */
+    user() {
+      return this.$store.state.user;
+    }
   },
   mounted() {},
-  methods: {}
+  methods: {
+    onLogout() {
+      this.$store.dispatch("logout");
+      this.$router.push("/");
+    }
+  }
 };
 </script>
 
