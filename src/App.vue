@@ -1,22 +1,22 @@
 <template>
   <v-app>
-<!-- opcao 'app' coloca a lista dentro da applicacao e fixa o navigation-->    <v-navigation-drawer v-model="drawer" app >
+<!-- opcao 'app' coloca a lista dentro da applicacao e fixa o navigation-->     <v-navigation-drawer v-model="drawer" app >
 
-    <v-list>
+        <v-list>
           <v-list-item>
             <v-list-item-avatar>
                     <v-btn fab dark color="white"
                         @click="dialog = !dialog"
                         v-if="userIsAuthenticated">
-                        <v-avatar size="52" >
-                            <v-img :src="user.photoURL">
+                        <v-avatar size="62" >
+                            <v-img :src="user.photoUrl">
                             </v-img>
                         </v-avatar>
                     </v-btn>
                     <v-btn fab dark color="white"
                         @click="dialog = !dialog"
                         v-else>
-                        <v-avatar size="52" >
+                        <v-avatar size="62" >
                             <v-img src="./profile.png">
                             </v-img>
                         </v-avatar>
@@ -34,11 +34,8 @@
                   {{user.email}}
               </v-list-item-subtitle>
             </v-list-item-content>
-
-             <v-list-item-action>
-              <v-icon>mdi-menu-down</v-icon>
-            </v-list-item-action>
           </v-list-item>
+
         </v-list>
         <v-divider></v-divider>
 <!-- menu -->
@@ -60,7 +57,7 @@
         </v-list>
 
 <!-- sair -->
-       <v-list-item
+        <v-list-item
           v-if="userIsAuthenticated"
           @click="onLogout">
           <v-list-item-icon>
@@ -101,25 +98,24 @@
       </v-btn>
     </v-app-bar>
 
+<!-- main -->
     <v-content>
-      <v-container
-        class="fill-height"
-        fluid
-      >
+      <v-container class="fill-height" flui >
         <router-view></router-view>
       </v-container>
     </v-content>
 
-    <v-footer color="primary" app >
-        <span class="white--text">&copy;xani</span>
+<!-- rodape -->
+    <v-footer color="grey-light2" app >
+        <span class="grey--text">&copy;xani</span>
         <v-spacer></v-spacer>
         <v-bottom-sheet v-model="sheet">
             <template v-slot:activator="{ on }">
-            <v-btn color="red" v-on="on">
+            <v-btn text color="red" v-on="on">
                 Redes Sociais
             </v-btn>
             </template>
-            <v-sheet class="text-center" height="100px">
+            <v-sheet class="text-center" height="40px">
                 <v-btn v-for="(icon,i) in icons"
                  :key="i"
                  :href="icon.link"
@@ -147,8 +143,9 @@ export default {
     item: 0,
     items: [
       { icon: "lock_open", title: "Entrar", link: "signin" },
+      { icon: "mdi-car", title: "Regatas", link: "regatas" },
       { icon: "mdi-image", title: "Fotos", link: "home" },
-      { icon: "mdi-folder", title: "Treino", link: "fotos" },
+      { icon: "mdi-dumbbell", title: "Treino", link: "fotos" },
       { icon: "face", title: "Registar", link: "signup" },
       { icon: "mdi-help", title: "Ajuda", link: "ajuda" }
     ],

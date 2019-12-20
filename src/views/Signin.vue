@@ -1,23 +1,18 @@
 <template>
-    <v-container fluid fill-height>
-    <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4>
+  <v-container>
+    <v-layout row v-if="error">
+      <v-flex xs12 sm6 offset-sm3>
+        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+      </v-flex>
+    </v-layout>
 
-        <v-toolbar dark color="primary">
-                <v-toolbar-title>Login</v-toolbar-title>
-        </v-toolbar>
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
+          <v-card-text>
+            <v-container>
+              <form @submit.prevent="onSignin">
 
-        <v-card color="white" >
-            <v-card flat height="30" >
-            </v-card>
-            <v-layout row v-if="error">
-                <v-flex xs12 sm6 offset-sm3>
-                    <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
-                </v-flex>
-            </v-layout>
-
-            <form @submit.prevent="onSignin">
-                 <v-flex xs12 sm8 offset-sm2>
                     <v-flex xs12>
                         <v-text-field
                         prepend-icon="person"
@@ -44,6 +39,27 @@
                         required></v-text-field>
                     </v-flex>
 
+
+
+                <v-layout>
+                    <v-btn   type="submit" :disabled="loading" :loading="loading">
+                      Sign in
+                      <v-icon right>lock_open</v-icon>
+                      <span slot="loader" class="custom-loader">
+                        <v-icon light>cached</v-icon>
+                       </span>
+                    </v-btn>
+                    <v-spacer></v-spacer>
+
+                      <v-btn  color="grey lighten-2" dark :disabled="loading" :loading="loading" @click.prevent="onResetPassword">Reset Password By Email
+                        <v-icon right dark>email</v-icon>
+                        <span slot="loader" class="custom-loader">
+                        <v-icon light>cached</v-icon>
+                       </span>
+                      </v-btn>
+            </v-layout>
+            <br />
+             <v-flex xs12>
                     <div align-center justify-center>
                         <!-- button facebook -->
                         <v-btn color="light-blue darken-4"
@@ -114,43 +130,18 @@
                             </span>
                         </v-btn>
                     </div>
+             </v-flex>
+<br />
 
-                 </v-flex>
-            <v-card flat height="30" >
 
+
+              </form>
+            </v-container>
+          </v-card-text>
         </v-card>
-            <v-layout row>
-                         <v-btn
-                            color="primary"
-                            @click="onSair">
-                            Cancel
-                            <v-icon right>
-                                exit_to_app
-                            </v-icon>
-                        </v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary"
-                            type="submit"
-                            :disabled="loading"
-                            :loading="loading">
-                            Entrar
-                            <v-icon right>
-                                lock_open
-                            </v-icon>
-                            <span slot="loader" class="custom-loader">
-                                <v-icon light>cached</v-icon>
-                            </span>
-                        </v-btn>
-
-            </v-layout>
-
-            </form>
-        </v-card>
-
-
-    </v-flex>
+      </v-flex>
     </v-layout>
-    </v-container>
+  </v-container>
 </template>
 
 <script>
@@ -158,11 +149,11 @@ export default {
   data() {
     return {
       email: "",
+      password: "",
       emailRules: [
         v => !!v || "E-mail é necessário",
         v => /.+@.+/.test(v) || "O e-mail tem que ser valido"
       ],
-      password: "",
       passRules: [
         v => v.length <= 10 || "A password tem que ter menos que 8 caracteres",
         v => v.length > 2 || "A password tem que ter mais que 3 caracteres"
@@ -183,32 +174,36 @@ export default {
   watch: {
     user(value) {
       if (value !== null && value !== undefined) {
-        this.$router.push("/");
+        this.$router.push("/profile");
       }
     }
   },
   methods: {
     onSignin() {
-      alert("EMAIL " + this.email + " " + this.password);
       this.$store.dispatch("signUserIn", {
         email: this.email,
         password: this.password
       });
     },
-    onSigninFacebook() {
-      this.$store.dispatch("signUserInFacebook");
-    },
-    onSigninTwitter() {
-      this.$store.dispatch("signUserInTwitter");
-    },
     onSigninGoogle() {
       this.$store.dispatch("signUserInGoogle");
     },
+    onSigninFacebook() {
+      //this.$store.dispatch('signUserInFacebook')
+    },
+    onSigninTwitter() {
+      //this.$store.dispatch('signUserInTwitter')
+    },
+    onResetPassword() {
+      if (this.email === "") {
+        return this.$store.dispatch("setError", {
+          message: "Email can not be blank"
+        });
+      }
+      this.$store.dispatch("resetPasswordWithEmail", { email: this.email });
+    },
     onDismissed() {
       this.$store.dispatch("clearError");
-    },
-    onSair() {
-      this.$router.push("/");
     }
   }
 };

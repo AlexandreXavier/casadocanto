@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import firebase from "../configFirebase.js";
+import db from "../configFirebase.js";
 
 export default {
   data() {
@@ -32,7 +32,7 @@ export default {
       images: [
         {
           id: 0,
-          url: "https://s3-eu-west-1.amazonaws.com/xanivouga/52.jpg",
+          url: "https://s3-eu-west-1.amazonaws.com/xanioptimist/52.webp",
           comment: "Regata Principe",
           info: ""
         }
@@ -40,7 +40,7 @@ export default {
     };
   },
   mounted() {
-    firebase.db
+    db
       .collection("images")
       .orderBy("created_at", "desc")
       .onSnapshot(snapShot => {

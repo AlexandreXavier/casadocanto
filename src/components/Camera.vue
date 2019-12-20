@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import firebase from "../configFirebase.js";
+import db from "../configFirebase.js";
 //import postImage from "./mixins/postImage.js";
 
 export default {
@@ -72,7 +72,7 @@ export default {
       const imageCapture = new window.ImageCapture(mediaStreamTrack);
 
       return imageCapture.takePhoto().then(blob => {
-        firebase.storage
+        db.storage
           .ref()
           .child(`images/${new Date().getTime()}`)
           .put(blob)

@@ -11,6 +11,11 @@ export default new Router({
             component: () => import('./views/Home.vue')
         },
         {
+            path: '/profile',
+            name: 'Profile',
+            component: () => import('./views/Profile.vue')
+        },
+        {
             path: '/fotos',
             name: 'fotos',
             component: () => import('./views/Fotos.vue')
@@ -28,10 +33,20 @@ export default new Router({
             component: () => import('./components/Details.vue')
         },
         {
+            path: '/calendar',
+            name: 'calendar',
+            component: () => import('./components/Calendar.vue')
+        },
+        {
+            path: '/regatas',
+            name: 'regatas',
+            component: () => import('./views/Regatas.vue')
+        },
+        {
             path: '/post',
             name: 'post',
             props: true,
-            component: () => import(/* webpackChunkName: "post" */ './components/Post.vue')
+            component: () => import('./components/Post.vue')
         },
         {
             path: '/camera',
